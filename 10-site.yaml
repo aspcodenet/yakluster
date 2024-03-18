@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: staticwebserver
+  namespace: yatest
+  labels:
+    app: staticwebserver
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: staticwebserver
+  template:
+    metadata:
+      labels:
+        app: staticwebserver
+    spec:
+      containers:
+        - name: staticwebserver
+          image: joseluisq/static-web-server 
+          ports:
+            - containerPort: 80
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: yatest
+  name: staticwebserver-service
+  annotations:
+    service.beta.kubernetes.io/linode-loadbalancer-throttle: "4"
+  labels:
+    app: staticwebserver
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: staticwebserver
+  sessionAffinity: None
