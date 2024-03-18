@@ -1,0 +1,71 @@
+# kubectl --kubeconfig=c:\temp\linode.yaml --namespace=yatest get pods
+# 
+# kubectl --kubeconfig=c:\temp\linode.yaml --namespace=yatest exec -it mysql-5f46cd7d5c-jz9xj sh
+# mysql -p 
+# hejsan123
+# mysql> create database salary
+
+
+# INSTALLERA MYSQL
+#         vi ska ha permanent lagring av databaserna
+# ändra på staticwebserver  yagolangapi
+#                           login till git.systementor.se 
+#                           (secret)
+# hur man tar fram en prompt i en container       
+# databas-fix  MySQL - create database
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: yatest
+spec:
+  replicas: 1
+  selector:
+     matchLabels:
+       app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      # affinity:
+      #   nodeAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       nodeSelectorTerms:
+      #       - matchExpressions:
+      #         - key: sql
+      #           operator: In
+      #           values:
+      #           - "mysqlnode"
+
+      terminationGracePeriodSeconds: 30
+      hostname: mysql01
+      containers:
+      - name: mysql
+        image: mysql
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "hejsan123"
+        volumeMounts:
+        - name: mysqldb
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysqldb
+        persistentVolumeClaim:
+          claimName: pvc-mysql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: yatest
+spec:
+  selector:
+    app: mysql
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  type: NodePort
