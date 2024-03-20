@@ -1,0 +1,53 @@
+# git.systementor.se/yacloud/stefansapi
+
+
+
+# kubectl --kubeconfig=./Downloads/stefansnya-kubeconfig.yaml --namespace=yatest create secret docker-registry regcred    --docker-server=git.systementor.se    --docker-username=yacloud    --docker-password=yacloud1    --docker-email=yacloud@systementor.se
+
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gosite
+  namespace: yatest
+  labels:
+    app: gosite
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gosite
+  template:
+    metadata:
+      labels:
+        app: gosite
+    spec:
+      containers:
+        - name: gosite
+          image: git.systementor.se/yacloud/stefansapi
+          ports:
+            - containerPort: 8080
+          env:
+            - name: RUNENVIRONMENT
+              value: Production
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: yatest
+  name: gosite-service
+  labels:
+    app: gosite
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: gosite
+  sessionAffinity: None
