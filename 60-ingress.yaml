@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: yatest
+  name: sites
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: "stefansstaticwebserver.systementor.se"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: staticwebserver-service
+                port:
+                  number: 80
+    - host: "stefansgositeapi.systementor.se"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: gosite-service
+                port:
+                  number: 80
+   
