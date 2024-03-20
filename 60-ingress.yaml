@@ -7,7 +7,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
 spec:
   rules:
-    - host: "stefansstaticwebserver.systementor.se"
+    - host: "stefansapi.jumpingcrab.com"
       http:
         paths:
           - pathType: Prefix
