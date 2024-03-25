@@ -17,7 +17,7 @@ spec:
                 name: staticwebserver-service
                 port:
                   number: 80
-    - host: "stefansgositeapi.systementor.se"
+    - host: "stefansapi0325.chickenkiller.com"
       http:
         paths:
           - pathType: Prefix

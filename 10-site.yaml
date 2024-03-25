@@ -29,8 +29,6 @@ kind: Service
 metadata:
   namespace: yatest
   name: staticwebserver-service
-  annotations:
-    service.beta.kubernetes.io/linode-loadbalancer-throttle: "4"
   labels:
     app: staticwebserver
 spec:
