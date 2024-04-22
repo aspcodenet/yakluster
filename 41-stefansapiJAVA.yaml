@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: javasystementorse
+  labels:
+    app: javasystementorse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: javasystementorse
+  template:
+    metadata:
+      labels:
+        app: javasystementorse 
+    spec:
+      containers:
+      - name: javasystementorse
+        image: registry.aspcode.net/javablacklist
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: spring.profiles.active
+          value: "production"
+      imagePullSecrets:
+      - name: regcredaspcode2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: javasystementorse-service
+  labels:
+    app: javasystementorse
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: javasystementorse

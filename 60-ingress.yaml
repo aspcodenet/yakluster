@@ -27,4 +27,3 @@ spec:
                 name: gosite-service
                 port:
                   number: 80
-   
