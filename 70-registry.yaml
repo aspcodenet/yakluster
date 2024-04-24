@@ -29,27 +29,35 @@ spec:
         app: gitea
     spec:
       containers:
-        - name: gitea
-          image: gitea/gitea
-          ports:
-            - containerPort: 3000
-          env:
-            - name: USER_UID
-              value: "1000"
-            - name: USER_GID
-              value: "1000"
-            - name: RUNENVIRONMENT
-              value: Production
-            - name: GITEA__database__DB_TYPE
-              value: mysql
-            - name: GITEA__database__HOST
-              value: mysql
-            - name: GITEA__database__NAME
-              value: gitea
-            - name: GITEA__database__USER
-              value: root
-            - name: GITEA__database__PASSWD
-              value: hejsan123
+      - name: gitea
+        image: gitea/gitea
+        ports:
+          - containerPort: 3000
+        env:
+          - name: USER_UID
+            value: "1000"
+          - name: USER_GID
+            value: "1000"
+          - name: RUNENVIRONMENT
+            value: Production
+          - name: GITEA__database__DB_TYPE
+            value: mysql
+          - name: GITEA__database__HOST
+            value: mysql
+          - name: GITEA__database__NAME
+            value: gitea
+          - name: GITEA__database__USER
+            value: root
+          - name: GITEA__database__PASSWD
+            value: hejsan123
+        volumeMounts:
+        - name: pvc-registry
+          mountPath: /data
+      volumes:
+      - name: pvc-registry
+        persistentVolumeClaim:
+          claimName: pvc-registry
+
 ---
 apiVersion: v1
 kind: Service
